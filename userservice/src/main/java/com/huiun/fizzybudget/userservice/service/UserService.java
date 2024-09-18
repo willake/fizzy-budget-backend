@@ -5,13 +5,16 @@ import com.huiun.fizzybudget.userservice.entity.User;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<User> findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findUserByUserId(Long userId);
 
-    void addRoleToUser(String username, String roleName);
+    Optional<User> findUserByUsername(String username);
 
-    void removeRoleFromUser(String username, String roleName);
+    Optional<User> findUserByEmail(String email);
+
+    void addRoleToUser(Long userId, Long roleId);
+
+    void removeRoleFromUser(Long userId, Long roleId);
 
     User createUser(User user);
 }

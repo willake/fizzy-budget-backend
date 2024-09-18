@@ -19,16 +19,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserByUserId(@PathVariable Long userId) {
+        Optional<User> user = userService.findUserByUserId(userId);
+        return user.map((ResponseEntity::ok))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        Optional<User> user = userService.findByUsername(username);
+        Optional<User> user = userService.findUserByUsername(username);
         return user.map((ResponseEntity::ok))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        Optional<User> user = userService.findByEmail(email);
+        Optional<User> user = userService.findUserByEmail(email);
         return user.map((ResponseEntity::ok))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -44,10 +51,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{username}/roles/{roleName}")
-    public ResponseEntity<?> addRoleToUser(@PathVariable String username, @PathVariable String roleName) {
+    @PutMapping("/{userId}/roles/{roleId}")
+    public ResponseEntity<?> addRoleToUser(@PathVariable Long userId, @PathVariable Long roleId) {
         try {
-            userService.addRoleToUser(username, roleName);
+            userService.addRoleToUser(userId, roleId);
             return ResponseEntity.ok("Role added successfully");
         }
         catch (UserNotFoundException | RoleNotFoundException e) {
@@ -55,10 +62,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{username}/roles/{roleName}")
-    public ResponseEntity<?> removeRoleFromUser(@PathVariable String username, @PathVariable String roleName) {
+    @DeleteMapping("/{userId}/roles/{roleId}")
+    public ResponseEntity<?> removeRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
         try {
-            userService.removeRoleFromUser(username, roleName);
+            userService.removeRoleFromUser(userId, roleId);
             return ResponseEntity.ok("Role removed successfully");
         }
          catch (UserNotFoundException | RoleNotFoundException e) {

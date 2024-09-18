@@ -22,12 +22,17 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findUserByUserId(Long userId) {
+        return userRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -49,9 +54,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
-        Optional<User> user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByRoleName(roleName)
+    public void addRoleToUser(Long userId, Long roleId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        Role role = roleRepository.findByRoleId(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
         if (user.isPresent()) {
@@ -65,9 +70,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeRoleFromUser(String username, String roleName) {
-        Optional<User> user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByRoleName(roleName)
+    public void removeRoleFromUser(Long userId, Long roleId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        Role role = roleRepository.findByRoleId(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
         if (user.isPresent()) {
