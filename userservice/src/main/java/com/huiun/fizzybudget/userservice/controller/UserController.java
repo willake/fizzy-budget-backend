@@ -1,7 +1,9 @@
 package com.huiun.fizzybudget.userservice.controller;
 
 import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserAlreadyExistsException;
+import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;
 import com.huiun.fizzybudget.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,5 +42,27 @@ public class UserController {
         catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
+    }
+
+    @PutMapping("/{username}/roles/{roleName}")
+    public ResponseEntity<?> addRoleToUser(@PathVariable String username, @PathVariable String roleName) {
+        try {
+            userService.addRoleToUser(username, roleName);
+            return ResponseEntity.ok("Role added successfully");
+        }
+        catch (UserNotFoundException | RoleNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{username}/roles/{roleName}")
+    public ResponseEntity<?> removeRoleFromUser(@PathVariable String username, @PathVariable String roleName) {
+        try {
+            userService.removeRoleFromUser(username, roleName);
+            return ResponseEntity.ok("Role removed successfully");
+        }
+         catch (UserNotFoundException | RoleNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+         }
     }
 }
