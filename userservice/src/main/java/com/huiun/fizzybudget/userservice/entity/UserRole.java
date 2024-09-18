@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name="user_role")
@@ -24,4 +25,10 @@ public class UserRole implements Serializable {
     @ManyToOne
     @JoinColumn(name="role_id")
     private Role role;
+
+    @Column(name = "created_at", updatable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 }
