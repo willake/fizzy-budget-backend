@@ -9,6 +9,7 @@ import com.huiun.fizzybudget.userservice.repository.RoleRepository;
 import com.huiun.fizzybudget.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     @Override
     public User createUser(User user) {
 
@@ -53,35 +55,27 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void addRoleToUser(Long userId, Long roleId) {
-        Optional<User> user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
         Role role = roleRepository.findByRoleId(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
-        if (user.isPresent()) {
-            User existingUser = user.get();
-            existingUser.getRoles().add(role);
-            userRepository.save(existingUser);
-        }
-        else {
-            throw new UserNotFoundException();
-        }
+        user.getRoles().add(role);
+        userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void removeRoleFromUser(Long userId, Long roleId) {
-        Optional<User> user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
         Role role = roleRepository.findByRoleId(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
-        if (user.isPresent()) {
-            User existingUser = user.get();
-            existingUser.getRoles().remove(role);
-            userRepository.save(existingUser);
-        }
-        else {
-            throw new UserNotFoundException();
-        }
+        user.getRoles().remove(role);
+        userRepository.save(user);
     }
 }
