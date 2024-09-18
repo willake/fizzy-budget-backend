@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Entity
-@Table(name="user_roles")
+@Table(name="user_role")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(UserRoleId.class)
+@IdClass(UserRoleId.class) // Indicates that a composite key is used
 public class UserRole implements Serializable {
 
     @Id

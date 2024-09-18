@@ -6,18 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name="roles")
+@Table(name="role")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
+    @Column(name="role_id")
+    private Long roleId;
 
     @Column(name="role_name", nullable = false, length = 50)
     private String roleName;
+
+    @OneToMany(mappedBy="role")
+    private Set<UserRole> userRoles;
 }
