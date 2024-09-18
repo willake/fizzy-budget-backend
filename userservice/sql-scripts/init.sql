@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `fizzybudget_user_db`;
 
 USE `fizzybudget_user_db`;
 
-DROP TABLE IF EXISTS `user_roles`;
+DROP TABLE IF EXISTS `user_role`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `user` (
@@ -34,13 +34,15 @@ VALUES
 CREATE TABLE `user_role` (
     user_id BIGINT,
     role_id BIGINT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES `user`(user_id),
     FOREIGN KEY (role_id) REFERENCES `role`(role_id),
     PRIMARY KEY (user_id, role_id)
 );
 
-INSERT INTO `user_role`
+INSERT INTO `user_role` (user_id, role_id, created_at, updated_at)
 VALUES 
-(1, 1),
-(1, 2),
-(1, 3);
+(1, 1, NOW(), NOW()),
+(1, 2, NOW(), NOW()),
+(1, 3, NOW(), NOW());

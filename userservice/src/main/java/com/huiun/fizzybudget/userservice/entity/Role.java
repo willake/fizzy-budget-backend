@@ -22,6 +22,11 @@ public class Role implements Serializable {
     @Column(name="role_name", nullable = false, length = 50)
     private String roleName;
 
-    @ManyToMany(mappedBy="role")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> users;
 }
