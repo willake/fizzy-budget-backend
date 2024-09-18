@@ -9,5 +9,9 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
+    void addRoleToUser(String username, String roleName);
+
+    void removeRoleFromUser(String username, String roleName);
+
     User createUser(User user);
 }
