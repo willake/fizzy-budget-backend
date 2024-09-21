@@ -22,7 +22,7 @@ public class Role implements Serializable {
     @Column(name="role_name", nullable = false, length = 50)
     private String roleName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "role_id"),
