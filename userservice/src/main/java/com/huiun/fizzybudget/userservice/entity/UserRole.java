@@ -31,4 +31,16 @@ public class UserRole implements Serializable {
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    // Auto set createdAt and updatedAt timestamps
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Timestamp(System.currentTimeMillis());
+        updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Timestamp(System.currentTimeMillis());
+    }
 }

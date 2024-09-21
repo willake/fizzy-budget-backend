@@ -52,6 +52,16 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("Email is already registered.");
         }
 
+        user.setActivated(true);
+
+        // Set createdAt and updatedAt automatically handled by @PrePersist
+
+        // Retrieve "User" role from role repository
+        Role userRole = roleRepository.findByRoleName("ROLE_USER")
+                .orElseThrow(() -> new RoleNotFoundException("Default role not found"));
+
+        user.getRoles().add(userRole);
+
         return userRepository.save(user);
     }
 
