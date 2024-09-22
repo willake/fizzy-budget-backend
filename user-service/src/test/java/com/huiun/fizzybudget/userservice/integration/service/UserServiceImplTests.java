@@ -1,10 +1,14 @@
-package com.huiun.fizzybudget.userservice.integration.repository;
+package com.huiun.fizzybudget.userservice.integration.service;
 
 import com.huiun.fizzybudget.userservice.entity.Role;
 import com.huiun.fizzybudget.userservice.entity.User;
 import com.huiun.fizzybudget.userservice.repository.RoleRepository;
 import com.huiun.fizzybudget.userservice.repository.UserRepository;
-import org.junit.jupiter.api.*;
+import com.huiun.fizzybudget.userservice.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,21 +18,23 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-public class UserRepositoryTests {
+public class UserServiceImplTests {
 
     @Autowired
-    private UserRepository userRepository;
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     private User testUser;
 
@@ -57,28 +63,31 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void testSaveAndFindById() {
+    public void testCreateUserIntegration() {
         User user = new User();
         user.setUsername("newUser");
         user.setPasswordHash(passwordEncoder.encode("newUser"));
         user.setEmail("newUser@gmail.com");
         user.setActivated(true);
+        userService.createUser(user);
 
-        User createdUser = userRepository.save(user);
-        assertNotNull(createdUser);
-        assertEquals("newUser", createdUser.getUsername());
-
-        Optional<User> retrievedUser = userRepository.findById(createdUser.getUserId());
+        Optional<User> retrievedUser = userRepository.findByUsername("newUser");
         assertTrue(retrievedUser.isPresent());
-        assertEquals("newUser", retrievedUser.get().getUsername());
+
+        User savedUser = retrievedUser.get();
+//        Should also create a role automatically
+        assertEquals(1, savedUser.getRoles().size());
+        assertEquals("ROLE_USER", savedUser.getRoles().iterator().next().getRoleName());
     }
 
     @Test
-    public void testUserRoleRelationship() {
-        testUser.getRoles().add(managerRole);
+    public void testAddRoleToUserIntegration() {
+        userService.addRoleToUser(testUser.getUserId(), managerRole.getRoleId());
 
-        User savedUser = userRepository.save(testUser);
+        Optional<User> retrievedUser = userRepository.findByUserId(testUser.getUserId());
+        assertTrue(retrievedUser.isPresent());
 
+        User savedUser = retrievedUser.get();
         assertEquals(2, savedUser.getRoles().size());
         assertTrue(savedUser.getRoles().stream()
                 .anyMatch(role -> "ROLE_MANAGER".equals(role.getRoleName())));
