@@ -81,6 +81,6 @@ public class UserRepositoryTests {
 
         assertEquals(2, savedUser.getRoles().size());
         assertTrue(savedUser.getRoles().stream()
-                .anyMatch(role -> "ROLE_MANAGER".equals(role.getRoleName())));
+                .anyMatch(role -> managerRole.getRoleName().equals(role.getRoleName())));
     }
 }

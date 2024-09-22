@@ -77,7 +77,7 @@ public class UserServiceImplTests {
         User savedUser = retrievedUser.get();
 //        Should also create a role automatically
         assertEquals(1, savedUser.getRoles().size());
-        assertEquals("ROLE_USER", savedUser.getRoles().iterator().next().getRoleName());
+        assertEquals(userRole.getRoleName(), savedUser.getRoles().iterator().next().getRoleName());
     }
 
     @Test
@@ -90,6 +90,17 @@ public class UserServiceImplTests {
         User savedUser = retrievedUser.get();
         assertEquals(2, savedUser.getRoles().size());
         assertTrue(savedUser.getRoles().stream()
-                .anyMatch(role -> "ROLE_MANAGER".equals(role.getRoleName())));
+                .anyMatch(role -> managerRole.getRoleName().equals(role.getRoleName())));
+    }
+
+    @Test
+    public void testRemoveRoleFromUserIntegration() {
+        userService.removeRoleFromUser(testUser.getUserId(), userRole.getRoleId());
+
+        Optional<User> retrievedUser = userRepository.findByUserId(testUser.getUserId());
+        assertTrue(retrievedUser.isPresent());
+
+        User savedUser = retrievedUser.get();
+        assertEquals(0, savedUser.getRoles().size());
     }
 }
