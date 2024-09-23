@@ -1,22 +1,30 @@
-package com.huiun.fizzybudget.userservice.unit.controller;
+package com.huiun.fizzybudget.userservice.integration.controller;
 
 import com.huiun.fizzybudget.userservice.controller.UserController;
 import com.huiun.fizzybudget.userservice.entity.Role;
 import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.userservice.security.JWTAuthenticationFilter;
+import com.huiun.fizzybudget.userservice.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,16 +38,25 @@ import static org.mockito.Mockito.when;
 import java.util.HashSet;
 import java.util.Optional;
 
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(UserController.class)
 public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
-    @InjectMocks
-    private UserController userController;
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private JWTTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     private User testUser;
     private Role userRole;
@@ -48,7 +65,7 @@ public class UserControllerTests {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+//        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         // create default user role
         userRole = new Role();
         userRole.setRoleId(1L);
@@ -73,6 +90,7 @@ public class UserControllerTests {
     @Test
     public void testGetUserByUserId_UserExists_ReturnUser() throws Exception {
         when(userService.findUserByUserId(testUser.getUserId())).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.encode(anyString())).thenReturn("123");
 
         mockMvc.perform(get("/api/v1/users/1"))
                 .andExpect(status().isOk())
