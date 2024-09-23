@@ -1,6 +1,6 @@
 package com.huiun.fizzybudget.userservice.service;
 
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.sharedentities.User;
 
 import java.util.Optional;
 

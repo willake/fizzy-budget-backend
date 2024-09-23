@@ -1,6 +1,6 @@
 package com.huiun.fizzybudget.userservice.repository;
 
-import com.huiun.fizzybudget.userservice.entity.Role;
+import com.huiun.fizzybudget.sharedentities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.huiun.fizzybudget.userservice.service;
 
-import com.huiun.fizzybudget.userservice.entity.Role;
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.sharedentities.Role;
+import com.huiun.fizzybudget.sharedentities.User;
 import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserAlreadyExistsException;
 import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;

@@ -1,6 +1,6 @@
 package com.huiun.fizzybudget.userservice.service;
 
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.sharedentities.User;
 import com.huiun.fizzybudget.userservice.repository.UserRepository;
 import com.huiun.fizzybudget.userservice.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return new CustomUserDetails(user);
     }

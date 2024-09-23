@@ -93,6 +93,12 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+		<!-- Shared entities library for Fizzy Budget -->
+		<dependency>
+			<groupId>com.huiun.fizzybudget</groupId>
+			<artifactId>shared-entities</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

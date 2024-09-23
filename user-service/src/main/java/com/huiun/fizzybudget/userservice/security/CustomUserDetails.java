@@ -1,6 +1,6 @@
 package com.huiun.fizzybudget.userservice.security;
 
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.sharedentities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
