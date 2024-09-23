@@ -5,7 +5,9 @@ Fizzy budget is a budget tracking web app. It allows users to create account and
 # Environment
 
 Java 22
+
 Spring Boot 3.3.3
+
 Maven
 
 # IDE
