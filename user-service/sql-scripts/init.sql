@@ -3,9 +3,10 @@ CREATE DATABASE  IF NOT EXISTS `fizzybudget_user_db`;
 USE `fizzybudget_user_db`;
 
 DROP TABLE IF EXISTS `user_role`;
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `app_user`;
 DROP TABLE IF EXISTS `role`;
-CREATE TABLE `user` (
+
+CREATE TABLE `app_user` (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -16,7 +17,7 @@ CREATE TABLE `user` (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-INSERT INTO `user` (username, email, password_hash, activated, provider, created_at, updated_at)
+INSERT INTO `app_user` (username, email, password_hash, activated, provider, created_at, updated_at)
 VALUES 
 ('user', 'user@gmail.com', '{noop}user', 1, NULL, NOW(), NOW());
 
@@ -36,7 +37,7 @@ CREATE TABLE `user_role` (
     role_id BIGINT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES `user`(user_id),
+    FOREIGN KEY (user_id) REFERENCES `app_user`(user_id),
     FOREIGN KEY (role_id) REFERENCES `role`(role_id),
     PRIMARY KEY (user_id, role_id)
 );
