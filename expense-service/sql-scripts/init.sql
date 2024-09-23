@@ -2,10 +2,10 @@ CREATE DATABASE  IF NOT EXISTS `fizzybudget_user_db`;
 
 USE `fizzybudget_user_db`;
 
+DROP TABLE IF EXISTS `recurrent_expense`;
+DROP TABLE IF EXISTS `expense`;
 DROP TABLE IF EXISTS `currency`;
 DROP TABLE IF EXISTS `category`;
-DROP TABLE IF EXISTS `expense`;
-DROP TABLE IF EXISTS `recurrent_expense`;
 
 CREATE TABLE `currency` (
     currency_id BIGINT AUTO_INCREMENT PRIMARY KEY,
