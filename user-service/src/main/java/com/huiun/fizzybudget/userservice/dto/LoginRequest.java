@@ -1,4 +1,4 @@
-package com.huiun.fizzybudget.userservice.payload;
+package com.huiun.fizzybudget.userservice.dto;
 
 import lombok.Data;
 

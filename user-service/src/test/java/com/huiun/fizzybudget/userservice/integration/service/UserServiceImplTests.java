@@ -1,16 +1,20 @@
 package com.huiun.fizzybudget.userservice.integration.service;
 
-import com.huiun.fizzybudget.sharedentities.Role;
-import com.huiun.fizzybudget.sharedentities.User;
-import com.huiun.fizzybudget.userservice.repository.RoleRepository;
-import com.huiun.fizzybudget.userservice.repository.UserRepository;
+import com.huiun.fizzybudget.common.entities.Role;
+import com.huiun.fizzybudget.common.entities.User;
+import com.huiun.fizzybudget.common.repository.RoleRepository;
+import com.huiun.fizzybudget.common.repository.UserRepository;
+import com.huiun.fizzybudget.common.security.JWTAuthenticationFilter;
+import com.huiun.fizzybudget.common.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +29,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UserServiceImplTests {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserService userService;
 
     private User testUser;
 

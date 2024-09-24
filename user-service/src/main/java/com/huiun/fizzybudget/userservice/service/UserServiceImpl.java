@@ -1,12 +1,12 @@
 package com.huiun.fizzybudget.userservice.service;
 
-import com.huiun.fizzybudget.sharedentities.Role;
-import com.huiun.fizzybudget.sharedentities.User;
+import com.huiun.fizzybudget.common.entities.Role;
+import com.huiun.fizzybudget.common.entities.User;
 import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserAlreadyExistsException;
 import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;
-import com.huiun.fizzybudget.userservice.repository.RoleRepository;
-import com.huiun.fizzybudget.userservice.repository.UserRepository;
+import com.huiun.fizzybudget.common.repository.RoleRepository;
+import com.huiun.fizzybudget.common.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

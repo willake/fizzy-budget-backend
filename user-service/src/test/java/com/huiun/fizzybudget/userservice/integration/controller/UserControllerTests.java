@@ -1,10 +1,10 @@
 package com.huiun.fizzybudget.userservice.integration.controller;
 
-import com.huiun.fizzybudget.sharedentities.Role;
-import com.huiun.fizzybudget.sharedentities.User;
+import com.huiun.fizzybudget.common.entities.Role;
+import com.huiun.fizzybudget.common.entities.User;
+import com.huiun.fizzybudget.common.security.JWTAuthenticationFilter;
+import com.huiun.fizzybudget.common.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.controller.UserController;
-import com.huiun.fizzybudget.userservice.security.JWTAuthenticationFilter;
-import com.huiun.fizzybudget.userservice.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

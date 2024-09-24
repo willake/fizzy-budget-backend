@@ -1,11 +1,11 @@
 package com.huiun.fizzybudget.userservice.unit.service;
 
-import com.huiun.fizzybudget.sharedentities.Role;
-import com.huiun.fizzybudget.sharedentities.User;
+import com.huiun.fizzybudget.common.entities.Role;
+import com.huiun.fizzybudget.common.entities.User;
 import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;
-import com.huiun.fizzybudget.userservice.repository.RoleRepository;
-import com.huiun.fizzybudget.userservice.repository.UserRepository;
+import com.huiun.fizzybudget.common.repository.RoleRepository;
+import com.huiun.fizzybudget.common.repository.UserRepository;
 import com.huiun.fizzybudget.userservice.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
