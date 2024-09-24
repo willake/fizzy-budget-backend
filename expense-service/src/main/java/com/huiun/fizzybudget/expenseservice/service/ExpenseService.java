@@ -1,6 +1,6 @@
 package com.huiun.fizzybudget.expenseservice.service;
 
-import com.huiun.fizzybudget.sharedentities.Expense;
+import com.huiun.fizzybudget.common.entities.Expense;
 
 import java.util.List;
 

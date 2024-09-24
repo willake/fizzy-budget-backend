@@ -1,7 +1,7 @@
 package com.huiun.fizzybudget.expenseservice.service;
 
 import com.huiun.fizzybudget.expenseservice.repository.ExpenseRepository;
-import com.huiun.fizzybudget.sharedentities.Expense;
+import com.huiun.fizzybudget.common.entities.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

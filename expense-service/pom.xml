@@ -11,7 +11,7 @@
 	<groupId>com.huiun.fizzybudget</groupId>
 	<artifactId>expenseservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>expenseservice</name>
+	<name>expense-service</name>
 	<description>Expense Service for FizzBudget</description>
 	<url/>
 	<licenses>
@@ -89,12 +89,11 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-
-		<!-- Shared Entity for Fizzy Budget -->
+		<!-- Shared common library for Fizzy Budget -->
 		<dependency>
 			<groupId>com.huiun.fizzybudget</groupId>
-			<artifactId>shared-entities</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>common</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 	</dependencies>
 
