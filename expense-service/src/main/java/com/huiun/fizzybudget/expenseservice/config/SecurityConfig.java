@@ -21,7 +21,6 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/expense/**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
