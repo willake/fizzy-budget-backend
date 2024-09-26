@@ -22,6 +22,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest
 @EnableJpaRepositories(basePackages = {
         "com.huiun.fizzybudget.expenseservice.repository",
@@ -75,9 +77,110 @@ public class ExpenseRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Pageable pageable = PageRequest.of(0, 2, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(0, expenses.size(), Sort.by("id").ascending());
         Page<Expense> retrivedPage = expenseRepository.findAll(pageable);
 
-        logger.info("Hello");
+        assertEquals(expenses.size(), retrivedPage.getSize());
+
+        for (int i = 0; i < expenses.size(); i++) {
+            assertEquals(expenses.get(i).getExpenseAmount(), retrivedPage.getContent().get(i).getExpenseAmount());
+        }
+    }
+
+    @Test
+    public void testFindAllGreaterThan() {
+        int after = 2;
+        Pageable pageable = PageRequest.of(0, 2, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByIdGreaterThan((long) after, pageable);
+
+        assertEquals(expenses.size() - after, retrivedPage.getSize());
+
+        for (int i = 0; i < retrivedPage.getSize(); i++) {
+            assertEquals(expenses.get(after + i).getExpenseAmount(), retrivedPage.getContent().get(i).getExpenseAmount());
+        }
+    }
+
+    @Test
+    public void testFindAllByUserId() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByUserId(testUser.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+            expense -> assertEquals(testUser.getId(), expense.getUser().getId())
+        );
+    }
+
+    @Test
+    public void testFindAllByCategoryId() {
+        Category food = categories.getFirst();
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByCategoryId(food.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+                expense -> assertEquals(food.getId(), expense.getCategory().getId())
+        );
+    }
+
+    @Test
+    public void testFindAllByCurrencyId() {
+        Currency usd = currencies.getFirst();
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByCurrencyId(usd.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+                expense -> assertEquals(usd.getId(), expense.getCurrency().getId())
+        );
+    }
+
+    @Test
+    public void testFindAllByUserIdAndCategoryId() {
+        User user = testUser;
+        Category food = categories.getFirst();
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByUserIdAndCategoryId(user.getId(), food.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+                expense -> {
+                    assertEquals(user.getId(), expense.getUser().getId());
+                    assertEquals(food.getId(), expense.getCategory().getId());
+                }
+        );
+    }
+
+    @Test
+    public void testFindAllByUserIdAndCurrencyId() {
+        User user = testUser;
+        Currency usd = currencies.getFirst();
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findAllByUserIdAndCurrencyId(user.getId(), usd.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+                expense -> {
+                    assertEquals(user.getId(), expense.getUser().getId());
+                    assertEquals(usd.getId(), expense.getCurrency().getId());
+                }
+        );
+    }
+
+    @Test
+    public void testFindAllByFilters() {
+        User user = testUser;
+        Currency usd = currencies.getFirst();
+        Category food = categories.getFirst();
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Expense> retrivedPage = expenseRepository.findExpensesByFilters(user.getId(), food.getId(), usd.getId(), pageable);
+
+        retrivedPage.getContent().forEach(
+                expense -> {
+                    assertEquals(user.getId(), expense.getUser().getId());
+                    assertEquals(food.getId(), expense.getCategory().getId());
+                    assertEquals(usd.getId(), expense.getCurrency().getId());
+                }
+        );
     }
 }
