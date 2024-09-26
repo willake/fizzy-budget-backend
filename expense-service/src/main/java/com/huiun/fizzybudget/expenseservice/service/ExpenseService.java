@@ -1,6 +1,7 @@
 package com.huiun.fizzybudget.expenseservice.service;
 
-import com.huiun.fizzybudget.common.entities.Expense;
+import com.huiun.fizzybudget.common.entity.Expense;
+import com.huiun.fizzybudget.expenseservice.dto.ExpenseConnection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,7 +9,9 @@ import java.util.List;
 
 public interface ExpenseService {
 
-    Page<Expense> findAll(Pageable pageable);
+    ExpenseConnection findAll(Pageable pageable);
+
+    ExpenseConnection findAllAfter(Long afterId, Pageable pageable);
 
     Page<Expense> findAllByUserId(Long userId, Pageable pageable);
 

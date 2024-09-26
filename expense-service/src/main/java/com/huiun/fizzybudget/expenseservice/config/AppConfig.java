@@ -7,7 +7,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan(basePackages = "com.huiun.fizzybudget.common")
-@EnableJpaRepositories(basePackages = "com.huiun.fizzybudget.common.repository")
-@EntityScan(basePackages = "com.huiun.fizzybudget.common.entities")
+@EnableJpaRepositories(basePackages = {
+        "com.huiun.fizzybudget.expenseservice.repository",
+        "com.huiun.fizzybudget.common.repository"
+})
+@EntityScan(basePackages = "com.huiun.fizzybudget.common.entity")
 public class AppConfig {
 }
