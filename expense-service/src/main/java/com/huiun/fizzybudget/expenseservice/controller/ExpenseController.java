@@ -31,11 +31,11 @@ public class ExpenseController {
         if (after != null) {
             Long decodedCursor = PaginationUtil.decodeCursor(after);
             pageable = PageRequest.of(0, first, Sort.by("id").ascending());
-            return expenseService.findAll(pageable);
+            return expenseService.findAll(decodedCursor, pageable);
         }
         else {
             pageable = PageRequest.of(0, first, Sort.by("id").ascending());
-            return expenseService.findAll(pageable);
+            return expenseService.findAll(null, pageable);
         }
     }
 }

@@ -38,9 +38,16 @@ public class ExpenseServiceImpl implements ExpenseService {
     private CurrencyRepository currencyRepository;
 
     @Override
-    public ExpenseConnection findAll(Pageable pageable) {
+    public ExpenseConnection findAll(Long afterId, Pageable pageable) {
         // Get all expenses without considering an afterId (starting from the beginning)
-        Page<Expense> expensePage = expenseRepository.findAll(pageable);
+        Page<Expense> expensePage;
+
+        if(afterId != null) {
+            expensePage = expenseRepository.findAllByIdGreaterThan(afterId, pageable);
+        }
+        else {
+            expensePage = expenseRepository.findAll(pageable);
+        }
 
         // Map the list of expenses to edges with encoded cursors
         List<ExpenseEdge> edges = expensePage.getContent().stream()
@@ -55,86 +62,43 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseConnection findAllAfter(Long afterId, Pageable pageable) {
+    public ExpenseConnection findAllByFilters(ExpenseFilter filter, Long afterId, Pageable pageable) {
+        User user = null;
+        Category category = null;
+        Currency currency = null;
+
+        if(filter.getUserId() != null) {
+            user = userRepository.findById(filter.getUserId())
+                    .orElseThrow(UserNotFoundException::new);
+        }
+
+        if(filter.getCategoryName() != null) {
+            category = categoryRepository.findByCategoryName(filter.getCategoryName())
+                    .orElseThrow(CategoryNotFoundException::new);
+        }
+
+        if(filter.getCurrencyCode() != null) {
+            currency = currencyRepository.findByCurrencyCode(filter.getCurrencyCode())
+                    .orElseThrow(CurrencyNotFoundException::new);
+        }
+
         // Get all expenses without considering an afterId (starting from the beginning)
-        Page<Expense> expensePage = expenseRepository.findAllByIdGreaterThan(afterId, pageable);
-
-        // Map the list of expenses to edges with encoded cursors
-        List<ExpenseEdge> edges = expensePage.getContent().stream()
-                .map(expense -> new ExpenseEdge(expense, PaginationUtil.encodeCursor(expense.getId())))
-                .toList();
-
-        // Build the PageInfo object to check if there are more pages
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.setHasNextPage(expensePage.hasNext());
-
-        return new ExpenseConnection(edges, pageInfo);
-    }
-
-    @Override
-    public Page<Expense> findAllByUserId(Long userId, Pageable pageable) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        return expenseRepository.findAllByUserId(user.getId(), pageable);
-    }
-
-    @Override
-    public Page<Expense> findAllByCategoryName(String categoryName, Pageable pageable) {
-
-        Category category = categoryRepository.findByCategoryName(categoryName)
-                .orElseThrow(CategoryNotFoundException::new);
-
-        return expenseRepository.findAllByCategoryId(category.getId(), pageable);
-    }
-
-    @Override
-    public Page<Expense> findAllByCurrencyCode(String currencyCode, Pageable pageable) {
-
-        Currency currency = currencyRepository.findByCurrencyCode(currencyCode)
-                .orElseThrow(CurrencyNotFoundException::new);
-
-        return expenseRepository.findAllByCurrencyId(currency.getId(), pageable);
-    }
-
-    @Override
-    public Page<Expense> findAllByUserIdAndCategoryName(Long userId, String categoryName, Pageable pageable) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        Category category = categoryRepository.findByCategoryName(categoryName)
-                .orElseThrow(CategoryNotFoundException::new);
-        return expenseRepository.findAllByUserIdAndCategoryId(user.getId(), category.getId(), pageable);
-    }
-
-    @Override
-    public Page<Expense> findAllByUserIdAndCurrencyCode(Long userId, String currencyCode, Pageable pageable) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        Currency currency = currencyRepository.findByCurrencyCode(currencyCode)
-                .orElseThrow(CurrencyNotFoundException::new);
-
-        return expenseRepository.findAllByUserIdAndCurrencyId(user.getId(), currency.getId(), pageable);
-    }
-
-    @Override
-    public Page<Expense> findAllByUserIdAndCategoryNameAndCurrencyCode(Long userId, String categoryName, String currencyCode, Pageable pageable) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        Category category = categoryRepository.findByCategoryName(categoryName)
-                .orElseThrow(CategoryNotFoundException::new);
-
-        Currency currency = currencyRepository.findByCurrencyCode(currencyCode)
-                .orElseThrow(CurrencyNotFoundException::new);
-
-        return expenseRepository.findExpensesByFilters(
-                user.getId(), category.getId(), currency.getId(),
+        Page<Expense> expensePage = expenseRepository.findAllByFilters(
+                user != null ? user.getId() : null,
+                category != null ? category.getId() : null,
+                currency != null ? currency.getId() : null,
+                afterId,
                 pageable);
+
+        // Map the list of expenses to edges with encoded cursors
+        List<ExpenseEdge> edges = expensePage.getContent().stream()
+                .map(expense -> new ExpenseEdge(expense, PaginationUtil.encodeCursor(expense.getId())))
+                .toList();
+
+        // Build the PageInfo object to check if there are more pages
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setHasNextPage(expensePage.hasNext());
+
+        return new ExpenseConnection(edges, pageInfo);
     }
 }

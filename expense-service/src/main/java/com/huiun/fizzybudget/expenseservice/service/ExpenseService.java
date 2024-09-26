@@ -5,23 +5,11 @@ import com.huiun.fizzybudget.expenseservice.dto.ExpenseConnection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ExpenseService {
 
-    ExpenseConnection findAll(Pageable pageable);
+    ExpenseConnection findAll(Long afterId, Pageable pageable);
 
-    ExpenseConnection findAllAfter(Long afterId, Pageable pageable);
-
-    Page<Expense> findAllByUserId(Long userId, Pageable pageable);
-
-    Page<Expense> findAllByCategoryName(String categoryName, Pageable pageable);
-
-    Page<Expense> findAllByCurrencyCode(String currencyCode, Pageable pageable);
-
-    Page<Expense> findAllByUserIdAndCategoryName(Long userId, String categoryName, Pageable pageable);
-
-    Page<Expense> findAllByUserIdAndCurrencyCode(Long userId, String currencyCode, Pageable pageable);
-
-    Page<Expense> findAllByUserIdAndCategoryNameAndCurrencyCode(Long userId, String categoryName, String currencyCode, Pageable pageable);
+    ExpenseConnection findAllByFilters(ExpenseFilter filter, Long afterId, Pageable pageable);
 }
