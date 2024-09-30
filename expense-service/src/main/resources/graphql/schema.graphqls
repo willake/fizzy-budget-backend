@@ -41,19 +41,10 @@ type PageInfo {
 # Query
 type Query {
     # Get all expenses
-    getAllExpenses(page: Int, size: Int): [Expense!]!
-
-    # Get all expenses by user ID
-    getExpensesByUserId(userId: ID!, page: Int, size: Int): [Expense!]!
-
-    # Get all expenses by category ID
-    getExpensesByCategoryId(categoryId: ID!, page: Int, size: Int): [Expense!]!
-
-    # Get all expenses by currency ID
-    getExpensesByCurrencyId(currencyId: ID!, page: Int, size: Int): [Expense!]!
+    getAllExpenses(first: Int, after: String): [Expense!]!
 
     # Get all expenses by user ID, category ID, and currency ID
-    getExpensesByFilters(userId: ID, categoryId: ID, currencyId: ID, page: Int, size: Int): [Expense!]!
+    getExpensesByFilters(userId: ID, categoryName: ID, currencyCode: ID, first: Int, after: String): ExpenseConnection!
 
     # Get all categories
     getAllCategories: [Category!]!
