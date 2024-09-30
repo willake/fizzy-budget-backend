@@ -39,28 +39,28 @@ public class TestEntityFactory {
         expense1.setUser(user);
         expense1.setCategory(categories.get(0));
         expense1.setCurrency(currencies.get(0));
-        expense1.setExpenseAmount(new BigDecimal("11.0"));
+        expense1.setExpenseAmount(new BigDecimal("11.00"));
         expense1.setExpenseDescription("Ingredients");
 
         Expense expense2 = new Expense();
         expense2.setUser(user);
         expense2.setCategory(categories.get(0));
         expense2.setCurrency(currencies.get(0));
-        expense2.setExpenseAmount(new BigDecimal("11.0"));
+        expense2.setExpenseAmount(new BigDecimal("11.00"));
         expense2.setExpenseDescription("Ingredients");
 
         Expense expense3 = new Expense();
         expense3.setUser(user);
         expense3.setCategory(categories.get(0));
         expense3.setCurrency(currencies.get(0));
-        expense3.setExpenseAmount(new BigDecimal("11.0"));
+        expense3.setExpenseAmount(new BigDecimal("11.00"));
         expense3.setExpenseDescription("Ingredients");
 
         Expense expense4 = new Expense();
         expense4.setUser(user);
         expense4.setCategory(categories.get(1));
         expense4.setCurrency(currencies.get(0));
-        expense4.setExpenseAmount(new BigDecimal("11.0"));
+        expense4.setExpenseAmount(new BigDecimal("11.00"));
         expense4.setExpenseDescription("Ingredients");
 
 
