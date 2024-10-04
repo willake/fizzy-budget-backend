@@ -1,7 +1,7 @@
 package com.huiun.fizzybudget.userservice.integration.controller;
 
-import com.huiun.fizzybudget.common.entities.Role;
-import com.huiun.fizzybudget.common.entities.User;
+import com.huiun.fizzybudget.common.entity.Role;
+import com.huiun.fizzybudget.common.entity.User;
 import com.huiun.fizzybudget.common.security.JWTAuthenticationFilter;
 import com.huiun.fizzybudget.common.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.controller.UserController;
@@ -60,17 +60,17 @@ public class UserControllerTests {
 //        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         // create default user role
         userRole = new Role();
-        userRole.setRoleId(1L);
+        userRole.setId(1L);
         userRole.setRoleName("ROLE_USER");
 
         // create a manager role
         managerRole = new Role();
-        managerRole.setRoleId(1L);
+        managerRole.setId(1L);
         managerRole.setRoleName("ROLE_MANAGER");
 
         // create a test user with default role
         testUser = new User();
-        testUser.setUserId(1L);
+        testUser.setId(1L);
         testUser.setUsername("testUser");
         testUser.setEmail("testUser@gmail.com");
         testUser.setPasswordHash("testUser");
@@ -81,7 +81,7 @@ public class UserControllerTests {
 
     @Test
     public void testGetUserByUserId_UserExists_ReturnUser() throws Exception {
-        when(userService.findUserByUserId(testUser.getUserId())).thenReturn(Optional.of(testUser));
+        when(userService.findUserByUserId(testUser.getId())).thenReturn(Optional.of(testUser));
         when(passwordEncoder.encode(anyString())).thenReturn("123");
 
         mockMvc.perform(get("/api/v1/users/1"))

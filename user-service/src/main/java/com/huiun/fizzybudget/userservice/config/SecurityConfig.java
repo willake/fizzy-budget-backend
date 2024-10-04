@@ -1,7 +1,6 @@
 package com.huiun.fizzybudget.userservice.config;
 
 import com.huiun.fizzybudget.common.security.JWTAuthenticationFilter;
-import com.huiun.fizzybudget.common.security.JWTTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
