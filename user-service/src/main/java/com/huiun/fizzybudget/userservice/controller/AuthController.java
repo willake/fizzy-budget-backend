@@ -1,9 +1,9 @@
 package com.huiun.fizzybudget.userservice.controller;
 
-import com.huiun.fizzybudget.userservice.payload.LoginRequest;
-import com.huiun.fizzybudget.userservice.payload.LoginResponse;
-import com.huiun.fizzybudget.userservice.security.CustomUserDetails;
-import com.huiun.fizzybudget.userservice.security.JWTTokenProvider;
+import com.huiun.fizzybudget.common.security.CustomUserDetails;
+import com.huiun.fizzybudget.common.security.JWTTokenProvider;
+import com.huiun.fizzybudget.userservice.dto.LoginRequest;
+import com.huiun.fizzybudget.userservice.dto.LoginResponse;
 import com.huiun.fizzybudget.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

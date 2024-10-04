@@ -1,12 +1,13 @@
 package com.huiun.fizzybudget.userservice.unit.service;
 
-import com.huiun.fizzybudget.userservice.entity.Role;
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.common.entity.Role;
+import com.huiun.fizzybudget.common.entity.User;
 import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;
-import com.huiun.fizzybudget.userservice.repository.RoleRepository;
-import com.huiun.fizzybudget.userservice.repository.UserRepository;
+import com.huiun.fizzybudget.common.repository.RoleRepository;
+import com.huiun.fizzybudget.common.repository.UserRepository;
 import com.huiun.fizzybudget.userservice.service.UserServiceImpl;
+import com.huiun.fizzybudget.userservice.utility.TestEntityFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,40 +41,27 @@ public class UserServiceImplTests {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        // create default user role
-        userRole = new Role();
-        userRole.setRoleId(1L);
-        userRole.setRoleName("ROLE_USER");
+        List<Role> roles = TestEntityFactory.createDefaultRoles();
+        userRole = roles.get(0);
+        managerRole = roles.get(1);
 
-        // create a manager role
-        managerRole = new Role();
-        managerRole.setRoleId(1L);
-        managerRole.setRoleName("ROLE_MANAGER");
-
-        // create a test user with default role
-        testUser = new User();
-        testUser.setUserId(1L);
-        testUser.setUsername("testUser");
-        testUser.setEmail("testUser@gmail.com");
-        testUser.setPasswordHash("testUser");
-        testUser.setActivated(true);
-        testUser.setRoles(new HashSet<>());
-        testUser.getRoles().add(userRole);
+        testUser = TestEntityFactory.createDefaultUser(roles);
+        testUser.getRoles().removeIf(role -> role.getRoleName().equals(managerRole.getRoleName()));
     }
 
     @Test
     public void testFindUserByUserId_UserExists_ReturnUser() {
-        when(userRepository.findByUserId(testUser.getUserId())).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
 
-        Optional<User> retrievedUser = userService.findUserByUserId(1L);
+        Optional<User> retrievedUser = userService.findUserByUserId(testUser.getId());
 
         assertTrue(retrievedUser.isPresent());
-        assertEquals(1L, retrievedUser.get().getUserId());
+        assertEquals(testUser.getId(), retrievedUser.get().getId());
     }
 
     @Test
     public void testFindUserByUserId_UserNotFound_ReturnEmptyOptional() {
-        when(userRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Optional<User> retrievedUser = userService.findUserByUserId(2L);
 
@@ -81,12 +70,12 @@ public class UserServiceImplTests {
 
     @Test
     public void testAddRoleToUser_UserAndRoleExist_Success() {
-        when(userRepository.findByUserId(testUser.getUserId())).thenReturn(Optional.of(testUser));
-        when(roleRepository.findByRoleId(managerRole.getRoleId())).thenReturn(Optional.of(managerRole));
+        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(roleRepository.findById(managerRole.getId())).thenReturn(Optional.of(managerRole));
 
-        userService.addRoleToUser(testUser.getUserId(), managerRole.getRoleId());
+        userService.addRoleToUser(testUser.getId(), managerRole.getId());
 
-        Optional<User> retrievedUser = userRepository.findByUserId(testUser.getUserId());
+        Optional<User> retrievedUser = userRepository.findById(testUser.getId());
         assertTrue(retrievedUser.isPresent());
 
         User savedUser = retrievedUser.get();
@@ -97,21 +86,21 @@ public class UserServiceImplTests {
 
     @Test
     public void testAddRoleToUser_UserNotFound_ThrowsUserNotFoundException() {
-        when(userRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         UserNotFoundException exception = assertThrows(
                 UserNotFoundException.class,
-                () -> userService.addRoleToUser(999L, managerRole.getRoleId())
+                () -> userService.addRoleToUser(999L, managerRole.getId())
         );
     }
 
     @Test
     public void testAddRoleToUser_RoleNotFound_ThrowsRoleNotFoundException() {
-        when(userRepository.findByUserId(testUser.getUserId())).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
 
         RoleNotFoundException exception = assertThrows(
                 RoleNotFoundException.class,
-                () -> userService.addRoleToUser(1L, 999L)
+                () -> userService.addRoleToUser(testUser.getId(), 999L)
         );
     }
 }

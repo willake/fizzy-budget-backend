@@ -11,7 +11,7 @@
 	<groupId>com.huiun.fizzybudget</groupId>
 	<artifactId>expenseservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>expenseservice</name>
+	<name>expense-service</name>
 	<description>Expense Service for FizzBudget</description>
 	<url/>
 	<licenses>
@@ -66,6 +66,43 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- JWT Library -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version> <!-- Use the latest version available -->
+		</dependency>
+		<!-- To resolve java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<!-- Shared common library for Fizzy Budget -->
+		<dependency>
+			<groupId>com.huiun.fizzybudget</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.5</version>
+		</dependency>
+		<!-- GraphQL -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-graphql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.graphql</groupId>
+			<artifactId>spring-graphql-test</artifactId>
 		</dependency>
 	</dependencies>
 

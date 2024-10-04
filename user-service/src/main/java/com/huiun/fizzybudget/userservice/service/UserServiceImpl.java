@@ -1,16 +1,18 @@
 package com.huiun.fizzybudget.userservice.service;
 
-import com.huiun.fizzybudget.userservice.entity.Role;
-import com.huiun.fizzybudget.userservice.entity.User;
+import com.huiun.fizzybudget.common.entity.Role;
+import com.huiun.fizzybudget.common.entity.User;
 import com.huiun.fizzybudget.userservice.exception.RoleNotFoundException;
 import com.huiun.fizzybudget.userservice.exception.UserAlreadyExistsException;
 import com.huiun.fizzybudget.userservice.exception.UserNotFoundException;
-import com.huiun.fizzybudget.userservice.repository.RoleRepository;
-import com.huiun.fizzybudget.userservice.repository.UserRepository;
+import com.huiun.fizzybudget.common.repository.RoleRepository;
+import com.huiun.fizzybudget.common.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUserByUserId(Long userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findById(userId);
     }
 
     @Override
@@ -54,7 +56,8 @@ public class UserServiceImpl implements UserService {
 
         user.setActivated(true);
 
-        // Set createdAt and updatedAt automatically handled by @PrePersist
+        // save the user to repository first
+        user = userRepository.save(user);
 
         // Retrieve "User" role from role repository
         Role userRole = roleRepository.findByRoleName("ROLE_USER")
@@ -68,9 +71,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void addRoleToUser(Long userId, Long roleId) {
-        User user = userRepository.findByUserId(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        Role role = roleRepository.findByRoleId(roleId)
+        Role role = roleRepository.findById(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
         user.getRoles().add(role);
@@ -80,9 +83,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void removeRoleFromUser(Long userId, Long roleId) {
-        User user = userRepository.findByUserId(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        Role role = roleRepository.findByRoleId(roleId)
+        Role role = roleRepository.findById(roleId)
                 .orElseThrow(RoleNotFoundException::new);
 
         user.getRoles().remove(role);

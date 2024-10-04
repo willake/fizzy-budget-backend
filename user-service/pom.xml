@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.3</version>
+		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.huiun.fizzybudget</groupId>
-	<artifactId>userservice</artifactId>
+	<artifactId>user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>userservice</name>
-	<description>Demo project for Spring Boot</description>
+	<name>user-service</name>
+	<description>User service for Fizzy Budget</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -92,6 +92,12 @@
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
+		</dependency>
+		<!-- Shared common library for Fizzy Budget -->
+		<dependency>
+			<groupId>com.huiun.fizzybudget</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.7</version>
 		</dependency>
 	</dependencies>
 
