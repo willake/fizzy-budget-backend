@@ -45,4 +45,22 @@ type Query {
 
     # Get all expenses by user ID, category ID, and currency ID
     getAllExpensesByFilters(userId: ID, categoryName: String, currencyCode: String, first: Int, after: String): ExpenseConnection!
+
+    # Get all categories
+    getAllCategories: [Category!]!
+
+    # Get all currencies
+    getAllCurrencies: [Currency!]!
+}
+
+# Mutations
+type Mutation {
+    # Add a new expense
+    addExpense(amount: Float!, description: String, date: String!, userId: ID!, categoryId: ID!, currencyId: ID!): Expense!
+
+    # Update an existing expense
+    updateExpense(expenseId: ID!, amount: Float!, description: String, date: String!, categoryId: ID, currencyId: ID): Expense!
+
+    # Delete an expense
+    deleteExpense(expenseId: ID!): Boolean!
 }

@@ -1,6 +1,10 @@
 package com.huiun.fizzybudget.expenseservice.controller;
 
+import com.huiun.fizzybudget.common.entity.Category;
+import com.huiun.fizzybudget.common.entity.Currency;
 import com.huiun.fizzybudget.expenseservice.dto.ExpenseConnection;
+import com.huiun.fizzybudget.expenseservice.service.CategoryService;
+import com.huiun.fizzybudget.expenseservice.service.CurrencyService;
 import com.huiun.fizzybudget.expenseservice.service.ExpenseFilter;
 import com.huiun.fizzybudget.expenseservice.service.ExpenseService;
 import com.huiun.fizzybudget.expenseservice.utility.PaginationUtil;
@@ -12,11 +16,19 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.util.List;
+
 @Controller
 public class ExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CurrencyService currencyService;
 
     @QueryMapping
     public ExpenseConnection getAllExpenses(@Argument Integer first, @Argument String after) {
@@ -57,5 +69,15 @@ public class ExpenseController {
             pageable = PageRequest.of(0, first, Sort.by("id").ascending());
             return expenseService.findAllByFilters(new ExpenseFilter(userId, categoryName, currencyCode), null, pageable);
         }
+    }
+
+    @QueryMapping
+    public List<Category> getAllCategories() {
+        return categoryService.findAll();
+    }
+
+    @QueryMapping
+    public List<Currency> getAllCurrencies() {
+        return currencyService.findAll();
     }
 }
