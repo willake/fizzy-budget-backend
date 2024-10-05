@@ -58,6 +58,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Build the PageInfo object to check if there are more pages
         PageInfo pageInfo = new PageInfo();
+        pageInfo.setHasPreviousPage(expensePage.hasPrevious());
         pageInfo.setHasNextPage(expensePage.hasNext());
 
         return new ExpenseConnection(edges, pageInfo);
@@ -99,6 +100,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Build the PageInfo object to check if there are more pages
         PageInfo pageInfo = new PageInfo();
+        pageInfo.setHasPreviousPage(expensePage.hasPrevious());
         pageInfo.setHasNextPage(expensePage.hasNext());
 
         return new ExpenseConnection(edges, pageInfo);
