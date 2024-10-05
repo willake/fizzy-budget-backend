@@ -1,3 +1,7 @@
+# using https://github.com/graphql-java/graphql-java-extended-scalars
+scalar BigDecimal
+scalar DateTime @specifiedBy(url: "https://scalars.graphql.org/andimarek/date-time.html")
+
 type Category {
     categoryId: ID!
     categoryName: String!
@@ -13,9 +17,9 @@ type Currency {
 
 type Expense {
     expenseId: ID!
-    amount: Float!
+    amount: BigDecimal!
     description: String
-    date: String!
+    date: DateTime!
     userId: ID!
     categoryId: ID!
     currencyId: ID!
@@ -56,10 +60,10 @@ type Query {
 # Mutations
 type Mutation {
     # Add a new expense
-    addExpense(amount: Float!, description: String, date: String!, userId: ID!, categoryId: ID!, currencyId: ID!): Expense!
+    addExpense(amount: BigDecimal!, description: String, date: DateTime!, userId: ID!, categoryId: ID!, currencyId: ID!): Expense!
 
     # Update an existing expense
-    updateExpense(expenseId: ID!, amount: Float!, description: String, date: String!, categoryId: ID, currencyId: ID): Expense!
+    updateExpense(expenseId: ID!, amount: BigDecimal!, description: String, date: DateTime!, categoryId: ID, currencyId: ID): Expense!
 
     # Delete an expense
     deleteExpense(expenseId: ID!): Boolean!

@@ -9,6 +9,7 @@ import com.huiun.fizzybudget.expenseservice.dto.ExpenseEdge;
 import com.huiun.fizzybudget.expenseservice.dto.PageInfo;
 import com.huiun.fizzybudget.expenseservice.exception.CategoryNotFoundException;
 import com.huiun.fizzybudget.expenseservice.exception.CurrencyNotFoundException;
+import com.huiun.fizzybudget.expenseservice.exception.ExpenseNotFoundException;
 import com.huiun.fizzybudget.expenseservice.exception.UserNotFoundException;
 import com.huiun.fizzybudget.expenseservice.repository.CategoryRepository;
 import com.huiun.fizzybudget.expenseservice.repository.CurrencyRepository;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,5 +107,72 @@ public class ExpenseServiceImpl implements ExpenseService {
         pageInfo.setHasNextPage(expensePage.hasNext());
 
         return new ExpenseConnection(edges, pageInfo);
+    }
+
+    @Override
+    public Expense addExpense(BigDecimal amount, String description, LocalDateTime date, Long userId, Long categoryId, Long currencyId) {
+        User user = null;
+        Category category = null;
+        Currency currency = null;
+
+        user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        category = categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        currency = currencyRepository.findById(currencyId)
+                .orElseThrow(CurrencyNotFoundException::new);
+
+        Expense expense = new Expense();
+        expense.setExpenseAmount(amount);
+        expense.setExpenseDescription(description);
+        expense.setUser(user);
+        expense.setCategory(category);
+        expense.setCurrency(currency);
+        expense.setDate(date);
+
+        return expenseRepository.save(expense);
+    }
+
+    @Override
+    public Expense updateExpense(Long expenseId, BigDecimal amount, String description, LocalDateTime date, Long userId, Long categoryId, Long currencyId) {
+        Expense expense = null;
+        User user = null;
+        Category category = null;
+        Currency currency = null;
+
+        expense = expenseRepository.findById(expenseId)
+                .orElseThrow(ExpenseNotFoundException::new);
+
+        user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        category = categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        currency = currencyRepository.findById(currencyId)
+                .orElseThrow(CurrencyNotFoundException::new);
+
+        expense.setExpenseAmount(amount);
+        expense.setExpenseDescription(description);
+        expense.setUser(user);
+        expense.setCategory(category);
+        expense.setCurrency(currency);
+        expense.setDate(date);
+
+        return expenseRepository.save(expense);
+    }
+
+    @Override
+    public Boolean deleteExpense(Long expenseId) {
+
+        Optional<Expense> retrievedExpense = expenseRepository.findById(expenseId);
+
+        if(retrievedExpense.isEmpty()) return false;
+
+        expenseRepository.deleteById(expenseId);
+
+        return true;
     }
 }

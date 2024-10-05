@@ -2,6 +2,7 @@ package com.huiun.fizzybudget.expenseservice.controller;
 
 import com.huiun.fizzybudget.common.entity.Category;
 import com.huiun.fizzybudget.common.entity.Currency;
+import com.huiun.fizzybudget.common.entity.Expense;
 import com.huiun.fizzybudget.expenseservice.dto.ExpenseConnection;
 import com.huiun.fizzybudget.expenseservice.service.CategoryService;
 import com.huiun.fizzybudget.expenseservice.service.CurrencyService;
@@ -16,6 +17,8 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -79,5 +82,25 @@ public class ExpenseController {
     @QueryMapping
     public List<Currency> getAllCurrencies() {
         return currencyService.findAll();
+    }
+
+    @QueryMapping
+    public Expense addExpense(
+            @Argument BigDecimal amount, @Argument String description, @Argument LocalDateTime date,
+            @Argument Long userId, @Argument Long categoryId, @Argument Long currencyId) {
+        return expenseService.addExpense(amount, description, date, userId, categoryId, currencyId);
+    }
+
+    @QueryMapping
+    public Expense updateExpense(
+            @Argument Long expenseId,
+            @Argument BigDecimal amount, @Argument String description, @Argument LocalDateTime date,
+            @Argument Long userId, @Argument Long categoryId, @Argument Long currencyId) {
+        return expenseService.updateExpense(expenseId, amount, description, date, userId, categoryId, currencyId);
+    }
+
+    @QueryMapping
+    public Boolean deleteExpense(@Argument Long expenseId) {
+        return expenseService.deleteExpense(expenseId);
     }
 }
