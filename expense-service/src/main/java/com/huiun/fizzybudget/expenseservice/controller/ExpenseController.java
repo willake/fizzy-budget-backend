@@ -18,6 +18,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -86,7 +87,7 @@ public class ExpenseController {
 
     @QueryMapping
     public Expense addExpense(
-            @Argument BigDecimal amount, @Argument String description, @Argument LocalDateTime date,
+            @Argument BigDecimal amount, @Argument String description, @Argument LocalDate date,
             @Argument Long userId, @Argument Long categoryId, @Argument Long currencyId) {
         return expenseService.addExpense(amount, description, date, userId, categoryId, currencyId);
     }
@@ -94,7 +95,7 @@ public class ExpenseController {
     @QueryMapping
     public Expense updateExpense(
             @Argument Long expenseId,
-            @Argument BigDecimal amount, @Argument String description, @Argument LocalDateTime date,
+            @Argument BigDecimal amount, @Argument String description, @Argument LocalDate date,
             @Argument Long userId, @Argument Long categoryId, @Argument Long currencyId) {
         return expenseService.updateExpense(expenseId, amount, description, date, userId, categoryId, currencyId);
     }

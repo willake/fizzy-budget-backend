@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -110,7 +111,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public Expense addExpense(BigDecimal amount, String description, LocalDateTime date, Long userId, Long categoryId, Long currencyId) {
+    public Expense addExpense(BigDecimal amount, String description, LocalDate date, Long userId, Long categoryId, Long currencyId) {
         User user = null;
         Category category = null;
         Currency currency = null;
@@ -136,7 +137,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public Expense updateExpense(Long expenseId, BigDecimal amount, String description, LocalDateTime date, Long userId, Long categoryId, Long currencyId) {
+    public Expense updateExpense(Long expenseId, BigDecimal amount, String description, LocalDate date, Long userId, Long categoryId, Long currencyId) {
         Expense expense = null;
         User user = null;
         Category category = null;
