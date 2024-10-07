@@ -34,6 +34,12 @@ public class ExpenseController {
     @Autowired
     private CurrencyService currencyService;
 
+    public ExpenseController(ExpenseService expenseService, CategoryService categoryService, CurrencyService currencyService) {
+        this.expenseService = expenseService;
+        this.categoryService = categoryService;
+        this.currencyService = currencyService;
+    }
+
     @QueryMapping
     public ExpenseConnection getAllExpenses(@Argument Integer first, @Argument String after) {
         Pageable pageable;

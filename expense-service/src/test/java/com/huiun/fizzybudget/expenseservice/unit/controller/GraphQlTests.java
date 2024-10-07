@@ -14,31 +14,41 @@ import com.huiun.fizzybudget.expenseservice.utility.TestEntityFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ExpenseControllerTests {
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
+@GraphQlTest(ExpenseController.class)
+@Import(GraphQlConfig.class)
+public class GraphQlTests {
 
-    private ExpenseController expenseController;
+    @Autowired
+    GraphQlTester graphQlTester;
 
-    @Mock
+    @MockBean
     private ExpenseService expenseService;
 
-    @Mock
+    @MockBean
     private CategoryService categoryService;
 
-    @Mock
+    @MockBean
     private CurrencyService currencyService;
 
     private User testUser;
@@ -51,9 +61,7 @@ public class ExpenseControllerTests {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        expenseController = new ExpenseController(expenseService, categoryService, currencyService);
-
+//        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         // create default user role
         List<Role> roles = TestEntityFactory.createDefaultRoles();
         userRole = roles.get(0);
@@ -75,7 +83,7 @@ public class ExpenseControllerTests {
         for(int i = 0; i < expenses.size(); i++) { expenses.get(i).setId((long) i); }
     }
 
-    private ExpenseConnection getMockConnection() {
+    private ExpenseConnection getTestConnection() {
 
         List<ExpenseEdge> edges = expenses.stream()
                 .map(expense -> new ExpenseEdge(expense, PaginationUtil.encodeCursor(expense.getId())))
@@ -92,12 +100,38 @@ public class ExpenseControllerTests {
     @Test
     public void testGetAllExpenses_ReturnExpenses() throws Exception {
 
-        when(expenseService.findAll(any(), any())).thenReturn(getMockConnection());
+        when(expenseService.findAll(any(), any())).thenReturn(getTestConnection());
 
-        ExpenseConnection response = expenseController.getAllExpenses(10, null);
+        // prepare the GraphQL query
+        // language=GraphQL
+        String graphqlQuery = """
+            query { 
+                getAllExpenses(first: 10) { 
+                    edges { 
+                        node { 
+                            id 
+                            expenseAmount 
+                            expenseDescription
+                            date 
+                        } 
+                        cursor 
+                    } 
+                    pageInfo { 
+                        hasPreviousPage 
+                        hasNextPage 
+                    } 
+                }
+            }
+        """;
 
-        assertEquals(expenses.size(), response.getEdges().size());
-        assertEquals(expenses.get(0).getId(), response.getEdges().get(0).getNode().getId());
+        // perform the POST request to the GraphQL endpoint
+        graphQlTester.document(graphqlQuery)
+                .execute()
+                .path("getAllExpenses")
+                .entity(ExpenseConnection.class)
+                .satisfies(connection -> {
+                    assertEquals(connection.getEdges().size(), expenses.size());
+                });
     }
 
 }
