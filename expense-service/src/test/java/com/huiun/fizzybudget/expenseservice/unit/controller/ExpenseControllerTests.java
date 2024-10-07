@@ -100,4 +100,43 @@ public class ExpenseControllerTests {
         assertEquals(expenses.get(0).getId(), response.getEdges().get(0).getNode().getId());
     }
 
+    @Test
+    public void testGetAllExpensesByFilters_ReturnExpenses() throws Exception {
+
+        when(expenseService.findAllByFilters(any(), any(), any())).thenReturn(getMockConnection());
+
+        ExpenseConnection response = expenseController.getAllExpensesByFilters(
+                testUser.getId(), null, null,
+                10,null);
+
+        assertEquals(expenses.size(), response.getEdges().size());
+        assertEquals(expenses.get(0).getId(), response.getEdges().get(0).getNode().getId());
+    }
+
+    @Test
+    public void testGetAllCategories_ReturnCategories() throws Exception {
+
+        when(categoryService.findAll()).thenReturn(categories);
+
+        List<Category> response = expenseController.getAllCategories();
+
+        assertEquals(categories.size(), response.size());
+        for(int i = 0; i < categories.size(); i++) {
+            assertEquals(categories.get(i).getCategoryName(), response.get(i).getCategoryName());
+        }
+    }
+
+    @Test
+    public void testGetAllCurrencies_ReturnCurrencies() throws Exception {
+
+        when(currencyService.findAll()).thenReturn(currencies);
+
+        List<Currency> response = expenseController.getAllCurrencies();
+
+        assertEquals(currencies.size(), response.size());
+        for(int i = 0; i < currencies.size(); i++) {
+            assertEquals(currencies.get(i).getCurrencyCode(), response.get(i).getCurrencyCode());
+        }
+    }
+
 }
