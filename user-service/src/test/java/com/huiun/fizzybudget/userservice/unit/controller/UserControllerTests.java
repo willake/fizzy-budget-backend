@@ -1,4 +1,4 @@
-package com.huiun.fizzybudget.userservice.integration.controller;
+package com.huiun.fizzybudget.userservice.unit.controller;
 
 import com.huiun.fizzybudget.common.entity.Role;
 import com.huiun.fizzybudget.common.entity.User;
@@ -6,6 +6,7 @@ import com.huiun.fizzybudget.common.security.JWTAuthenticationFilter;
 import com.huiun.fizzybudget.common.security.JWTTokenProvider;
 import com.huiun.fizzybudget.userservice.controller.UserController;
 import com.huiun.fizzybudget.userservice.service.UserService;
+import com.huiun.fizzybudget.userservice.utility.TestEntityFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -59,24 +60,11 @@ public class UserControllerTests {
         MockitoAnnotations.openMocks(this);
 //        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         // create default user role
-        userRole = new Role();
-        userRole.setId(1L);
-        userRole.setRoleName("ROLE_USER");
+        List<Role> roles = TestEntityFactory.createDefaultRoles();
+        userRole = roles.get(0);
+        managerRole = roles.get(1);
 
-        // create a manager role
-        managerRole = new Role();
-        managerRole.setId(1L);
-        managerRole.setRoleName("ROLE_MANAGER");
-
-        // create a test user with default role
-        testUser = new User();
-        testUser.setId(1L);
-        testUser.setUsername("testUser");
-        testUser.setEmail("testUser@gmail.com");
-        testUser.setPasswordHash("testUser");
-        testUser.setActivated(true);
-        testUser.setRoles(new HashSet<>());
-        testUser.getRoles().add(userRole);
+        testUser = TestEntityFactory.createDefaultUser(roles);
     }
 
     @Test

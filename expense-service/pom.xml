@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>com.huiun.fizzybudget</groupId>
 			<artifactId>common</artifactId>
-			<version>0.0.5</version>
+			<version>0.0.12</version>
 		</dependency>
 		<!-- GraphQL -->
 		<dependency>
@@ -103,6 +103,11 @@
 		<dependency>
 			<groupId>org.springframework.graphql</groupId>
 			<artifactId>spring-graphql-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java-extended-scalars</artifactId>
+			<version>22.0</version>
 		</dependency>
 	</dependencies>
 

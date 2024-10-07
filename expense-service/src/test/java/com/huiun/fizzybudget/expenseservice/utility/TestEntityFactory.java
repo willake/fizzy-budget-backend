@@ -3,8 +3,10 @@ package com.huiun.fizzybudget.expenseservice.utility;
 import com.huiun.fizzybudget.common.entity.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class TestEntityFactory {
@@ -39,6 +41,7 @@ public class TestEntityFactory {
         expense1.setUser(user);
         expense1.setCategory(categories.get(0));
         expense1.setCurrency(currencies.get(0));
+        expense1.setDate(LocalDate.now());
         expense1.setExpenseAmount(new BigDecimal("11.00"));
         expense1.setExpenseDescription("Ingredients");
 
@@ -46,6 +49,7 @@ public class TestEntityFactory {
         expense2.setUser(user);
         expense2.setCategory(categories.get(0));
         expense2.setCurrency(currencies.get(0));
+        expense2.setDate(LocalDate.now());
         expense2.setExpenseAmount(new BigDecimal("11.00"));
         expense2.setExpenseDescription("Ingredients");
 
@@ -53,6 +57,7 @@ public class TestEntityFactory {
         expense3.setUser(user);
         expense3.setCategory(categories.get(0));
         expense3.setCurrency(currencies.get(0));
+        expense3.setDate(LocalDate.now());
         expense3.setExpenseAmount(new BigDecimal("11.00"));
         expense3.setExpenseDescription("Ingredients");
 
@@ -60,6 +65,7 @@ public class TestEntityFactory {
         expense4.setUser(user);
         expense4.setCategory(categories.get(1));
         expense4.setCurrency(currencies.get(0));
+        expense4.setDate(LocalDate.now());
         expense4.setExpenseAmount(new BigDecimal("11.00"));
         expense4.setExpenseDescription("Ingredients");
 

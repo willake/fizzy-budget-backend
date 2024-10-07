@@ -1,24 +1,34 @@
+# using https://github.com/graphql-java/graphql-java-extended-scalars
+scalar BigDecimal
+scalar Date @specifiedBy(url: "https://tools.ietf.org/html/rfc3339")
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+}
+
 type Category {
-    categoryId: ID!
+    id: ID!
     categoryName: String!
     categoryDescription: String
 }
 
 type Currency {
-    currencyId: ID!
+    id: ID!
     currencyCode: String!
     currencyName: String!
     currencySymbol: String!
 }
 
 type Expense {
-    expenseId: ID!
-    amount: Float!
-    description: String
-    date: String!
-    userId: ID!
-    categoryId: ID!
-    currencyId: ID!
+    id: ID!
+    expenseAmount: BigDecimal!
+    expenseDescription: String
+    date: Date!
+    user: User!
+    category: Category!
+    currency: Currency!
 }
 
 type ExpenseConnection {
@@ -41,10 +51,10 @@ type PageInfo {
 # Query
 type Query {
     # Get all expenses
-    getAllExpenses(first: Int, after: String): [Expense!]!
+    getAllExpenses(first: Int, after: String): ExpenseConnection!
 
     # Get all expenses by user ID, category ID, and currency ID
-    getExpensesByFilters(userId: ID, categoryName: ID, currencyCode: ID, first: Int, after: String): ExpenseConnection!
+    getAllExpensesByFilters(userId: ID, categoryName: String, currencyCode: String, first: Int, after: String): ExpenseConnection!
 
     # Get all categories
     getAllCategories: [Category!]!
@@ -56,10 +66,10 @@ type Query {
 # Mutations
 type Mutation {
     # Add a new expense
-    addExpense(amount: Float!, description: String, date: String!, userId: ID!, categoryId: ID!, currencyId: ID!): Expense!
+    addExpense(amount: BigDecimal!, description: String, date: Date!, userId: ID!, categoryId: ID!, currencyId: ID!): Expense!
 
     # Update an existing expense
-    updateExpense(expenseId: ID!, amount: Float!, description: String, date: String!, categoryId: ID, currencyId: ID): Expense!
+    updateExpense(expenseId: ID!, amount: BigDecimal!, description: String, date: Date!, categoryId: ID, currencyId: ID): Expense!
 
     # Delete an expense
     deleteExpense(expenseId: ID!): Boolean!
